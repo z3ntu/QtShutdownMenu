@@ -63,7 +63,7 @@ class ShutdownMenu(QDialog):
 
     def suspend(self):
         self.disable_buttons()
-        os.system("i3lock")
+        os.system("lock")
         os.system("dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 \"org.freedesktop.login1.Manager.Suspend\" boolean:true")
         self.close()
 
