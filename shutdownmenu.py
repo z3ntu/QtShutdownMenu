@@ -58,23 +58,21 @@ class ShutdownMenu(QDialog):
 
     def exit(self):
         self.disable_buttons()
-        os.system("i3-msg exit")
         self.close()
 
     def suspend(self):
         self.disable_buttons()
-        os.system("lock")
-        os.system("dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 \"org.freedesktop.login1.Manager.Suspend\" boolean:true")
+        suspend_dbus()
         self.close()
 
     def reboot(self):
         self.disable_buttons()
-        os.system("dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 \"org.freedesktop.login1.Manager.Reboot\" boolean:true")
+        reboot_dbus()
         self.close()
 
     def shutdown(self):
         self.disable_buttons()
-        os.system("dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 \"org.freedesktop.login1.Manager.PowerOff\" boolean:true")
+        shutdown_dbus()
         self.close()
 
     def disable_buttons(self):
@@ -85,7 +83,34 @@ class ShutdownMenu(QDialog):
         self.shutdown_button.setEnabled(False)
 
 
+def exit_system():
+    os.system("i3-msg exit")
+
+
+def suspend_dbus():
+    os.system("lock")
+    os.system("dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 \"org.freedesktop.login1.Manager.Suspend\" boolean:true")
+
+
+def reboot_dbus():
+    os.system("dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 \"org.freedesktop.login1.Manager.Reboot\" boolean:true")
+
+
+def shutdown_dbus():
+    os.system("dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 \"org.freedesktop.login1.Manager.PowerOff\" boolean:true")
+
+
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    dl = ShutdownMenu()
-    sys.exit(app.exec_())
+    if len(sys.argv) is 1:
+        app = QApplication(sys.argv)
+        dl = ShutdownMenu()
+        sys.exit(app.exec_())
+    else:
+        if sys.argv[1] == "logout":
+            exit_system()
+        elif sys.argv[1] == "suspend":
+            suspend_dbus()
+        elif sys.argv[1] == "reboot":
+            reboot_dbus()
+        elif sys.argv[1] == "shutdown":
+            shutdown_dbus()
