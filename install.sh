@@ -1,22 +1,25 @@
 #!/bin/bash
+if [ "$1" == "--prefix" ]; then
+  if [ "$2" != "" ]; then
+    PREFIX=$2
+  else
+    echo "Please specify a prefix."
+    echo "Use --help for more information."
+    exit
+  fi
+elif [ "$1" == "--help" ]; then
+  echo "This script supports:"
+  echo "./install.sh --prefix <prefix>"
+  echo "You may need to run this script as root."
+  echo "This will copy shutdownmenu.py & lock.sh to \$PREFIX/bin/ and icon.png to /usr/share/icons/"
+  exit
+else
+  PREFIX=/usr/local
+fi
 
-shutdownloc="/usr/local/bin/qtshutdownmenu"
-lockloc="/usr/local/bin/lock"
-iconloc="/usr/share/icons/lock.png"
-
-cat << EOF
-Copying:
-'shutdownmenu.py' to '$shutdownloc'
-'lock.sh' to '$lockloc'
-'icon.png' to '$iconloc'
-EOF
-
-# Copy files
-sudo cp shutdownmenu.py $shutdownloc
-sudo cp icon.png $iconloc
-sudo cp lock.sh $lockloc
-
-# Set permissions
-sudo chmod +x $shutdownloc
-sudo chmod +x $lockloc
-
+#install -Dm644 "$srcdir/shutdownmenu.py" "$pkgdir/$PREFIX/bin/qtshutdownmenu"
+#install -Dm644 "$srcdir/lock.sh" "$pkgdir/$PREFIX/bin/lock"
+#install -Dm644 "$srcdir/icon.png" "$pkgdir/usr/share/icons/lock.png"
+install -Dm755 "shutdownmenu.py" "$PREFIX/bin/qtshutdownmenu"
+install -Dm755 "lock.sh" "$PREFIX/bin/lock"
+install -Dm755 "icon.png" "/usr/share/icons/lock.png"

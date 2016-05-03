@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=QtShutdownMenu
+Comment=Graphical shutdown util with PyQt5 and lock script for i3
+Exec=qtshutdownmenu
+Terminal=false

@@ -58,6 +58,7 @@ class ShutdownMenu(QDialog):
 
     def exit(self):
         self.disable_buttons()
+        exit_system()
         self.close()
 
     def suspend(self):
